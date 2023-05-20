@@ -3,8 +3,10 @@
     <main>
         <section class="items">
             <h4>Shopping Card</h4>
-            <div class="product selected"
+            <div class="product"
             v-for="makeup in makeup" :key="makeup" 
+            @click="makeup.rouver = !makeup.rouver"
+            :class="makeup.rouver ? 'selected' : '' "
             >
                 <div class="photo">
                     <img src={{makeup.image_link}}>
@@ -13,10 +15,10 @@
                 >
                     <span class="name">{{makeup.name}}</span>
                     <span class="price">{{makeup.price}}</span>
-                    <div class="quantity-area">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
+                    <div class="quantity-area" v-if="makeup.rouver">
+                        <button @click.stop="quantit--">-</button>
+                        <span class="quantity">{{quantit}}</span>
+                        <button @click.stop="quantit++">+</button>
                     </div>
                 </div>
             </div>
@@ -33,7 +35,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1x T-shirt</td>
+                        <td>1x makeup</td>
                         <td>5.99</td>
                     </tr>
                     
@@ -53,8 +55,13 @@ export default {
     data() {
         return {
             makeup: {},
+            rouver: false,
+            quantit: '',
 
         }
+    },
+    methods() {
+
     },
     created() {
         this.axios.get('http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=lipstick')
