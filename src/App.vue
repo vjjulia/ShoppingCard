@@ -3,41 +3,16 @@
     <main>
         <section class="items">
             <h4>Shopping Card</h4>
-            <div class="product selected">
+            <div class="product selected"
+            v-for="makeup in makeup" :key="makeup" 
+            >
                 <div class="photo">
-                    <img src="">
+                    <img src={{makeup.image_link}}>
                 </div>
-                <div class="description">
+                <div class="description"
+                >
                     <span class="name">{{makeup.name}}</span>
                     <span class="price">{{makeup.price}}</span>
-                    <div class="quantity-area">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product">
-                <div class="photo">
-                    <img src="">
-                </div>
-                <div class="description">
-                    <span class="name">Shirt Cotton T-shirt</span>
-                    <span class="price">$ 2.99</span>
-                    <div class="quantity-area">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product">
-                <div class="photo">
-                    <img src="">
-                </div>
-                <div class="description">
-                    <span class="name">Shirt Cotton T-shirt</span>
-                    <span class="price">$ 3.49</span>
                     <div class="quantity-area">
                         <button>-</button>
                         <span class="quantity">1</span>
