@@ -4,24 +4,24 @@
         <section class="items">
             <h4>Shopping Card</h4>
             <div class="product"
-            v-for="makeup in makeup" :key="makeup" 
-            @click="makeup.rouver = !makeup.rouver"
-            :class="makeup.rouver ? 'selected' : '' "
-            >
-                <div class="photo">
-                    <img src={{makeup.image_link}}>
-                </div>
-                <div class="description"
-                >
-                    <span class="name">{{makeup.name}}</span>
-                    <span class="price">{{makeup.price}}</span>
-                    <div class="quantity-area" v-if="makeup.rouver">
-                        <button @click.stop="quantit--">-</button>
-                        <span class="quantity">{{quantit}}</span>
-                        <button @click.stop="quantit++">+</button>
-                    </div>
-                </div>
-            </div>
+              v-for="(makeup, index) in makeups"
+              :key="index"
+              @click="toggleSelection(makeup)"
+              :class="{ selected: makeup.isSelected }">
+                  {{ isSelected }}
+              <div class="photo">
+                  <img :src="makeup.image_link">
+              </div>
+              <div class="description">
+                  <span class="name">{{ makeup.name }}</span>
+                  <span class="price">{{ makeup.price }}</span>
+                  <div class="quantity-area" v-if="makeup.isSelected">
+                      <button @click.stop="decreaseQuantity(makeup)">-</button>
+                      <span class="quantity">{{ makeup.quantity }}</span>
+                      <button @click.stop="increaseQuantity(makeup)">+</button>
+                  </div>
+              </div>
+        </div>
         </section>
 
         <section class="summary">
@@ -35,13 +35,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1x makeup</td>
-                        <td>5.99</td>
+                        <td>{{selectionItems}}</td>
+                        <td>{{totalFinal}}</td>
                     </tr>
                     
                     <tr>
                         <th>Total</th>
-                        <th>edd</th>
+                        <th>7;22</th>
                     </tr>
                 </tbody>
             </table>
@@ -50,23 +50,46 @@
 </body>
 </template>
 <script>
+
 export default {
     name: 'App',
     data() {
         return {
-            makeup: {},
-            rouver: false,
-            quantit: '',
-
+            makeups: [],
+            selectionItems: [],
+            totalFinal: 0,
         }
     },
-    methods() {
-
+    methods: {
+     car() {
+        if (this.isSelected == true) {
+          this.selectionItems = this.makeup.quantity + 'x' + this.makeup.name;
+        }
+      },
+      total() {
+        if (this.isSelected == true) {
+          this.totalFinal = this.makeup.quantity * this.makeup.price
+        }
+      },
+      toggleSelection(makeup) {
+        makeup.isSelected = !makeup.isSelected;
+      },
+      decreaseQuantity(makeup) {
+        if (makeup.quantity > 0) {
+          makeup.quantity--;
+        }
+      },
+      increaseQuantity(makeup) {
+        makeup.quantity++;
+      },
     },
     created() {
         this.axios.get('http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=lipstick')
         .then((response) => {
-            this.makeup = response.data
+            this.makeups = response.data
+            for (let i = 0; i < this.makeups.length; i++ ) {
+              this.makeups[i].quantity = 0;
+            } 
 
         })
     }
